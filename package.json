@@ -1,0 +1,67 @@
+{
+  "name": "react-scroll-captor",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "babel src -d lib",
+    "delete": "rm -rf node_modules",
+    "lint": "eslint src/.",
+    "prepublish": "yarn run build",
+    "test": "jest",
+    "precommit": "flow check && lint-staged"
+  },
+  "jest": {
+    "setupFiles": [
+      "./jest.js"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jossmac/react-scroll-captor.git"
+  },
+  "keywords": [
+    "react",
+    "scroll",
+    "scroll-captor",
+    "scroll-capture",
+    "scroll-lock",
+    "scroll-block"
+  ],
+  "author": "Joss mackison",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jossmac/react-scroll-captor/issues"
+  },
+  "homepage": "https://github.com/jossmac/react-scroll-captor#readme",
+  "dependencies": {
+    "raf-schd": "^2.1.0",
+    "react-node-resolver": "^1.0.1"
+  },
+  "peer-dependencies": {
+    "react": "^15.0 || ^16.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.2.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-flow": "^6.23.0",
+    "babel-preset-react": "^6.24.1",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "eslint": "^4.17.0",
+    "eslint-plugin-react": "^7.6.1",
+    "flow-bin": "^0.65.0",
+    "jest": "^22.2.2",
+    "jest-cli": "^22.2.2",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  },
+  "lint-staged": {
+    "*.js": "eslint"
+  }
+}
