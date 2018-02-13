@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component, type Element } from 'react';
+import React, { Component } from 'react';
 
 import ScrollCaptor, { type CaptorProps } from './ScrollCaptor';
 

@@ -1,34 +1,38 @@
-# React Node Resolver
+# React Scroll Captor
 
-A generic technique for resolving the DOM node of any react component.
+A component that confines scroll events to its immediate child. Great for dropdown menus etc.
 
 ### Install
 
 ```bash
-yarn add react-node-resolver
+yarn add react-scroll-captor
 ```
 
 ### Use
 
 ```jsx
-import NodeResolver from 'react-node-resolver';
-
-class ObfuscatedComponent extends Component {
-  render() {
-    return <div id="inaccessible-node" />;
-  }
-}
+import ScrollCaptor from 'react-scroll-captor';
 
 class GroovyThing extends Component {
-  getNode = (ref) => {
-    console.log(ref); // <div id="inaccessible-node" />
+  atBottom = () => {
+    // user has scrolled to the bottom
   }
   render () {
     return (
-      <NodeResolver innerRef={this.getNode}>
-        <ObfuscatedComponent />
-      </NodeResolver>
+      <ScrollCaptor onBottomArrive={this.atBottom}>
+        <ScrollableElement />
+      </ScrollCaptor>
     );
   }
 }
 ```
+
+### Props
+
+| Property  | Type    | Default | Description |
+| --------- | ------- | ------- | ----------- |
+| `isEnabled` | `boolean` | `true`    | Enable or disable the component. |
+| `onBottomArrive` | `(SyntheticEvent<HTMLElement>) => void` | `undefined` | Called when the user reaches the bottom of the scrollable element. |
+| `onBottomLeave` | `(SyntheticEvent<HTMLElement>) => void` | `undefined` | Called when the user leaves the bottom of the scrollable element. |
+| `onTopArrive` | `(SyntheticEvent<HTMLElement>) => void` | `undefined` | Called when the user reaches the top of the scrollable element. |
+| `onTopLeave` | `(SyntheticEvent<HTMLElement>) => void` | `undefined` | Called when the user leaves the top of the scrollable element. |

@@ -5,7 +5,6 @@ import NodeResolver from 'react-node-resolver';
 
 export type CaptorProps = {
   children: Element<*>,
-  isEnabled: boolean,
   onBottomArrive: (event: SyntheticEvent<HTMLElement>) => void,
   onBottomLeave: (event: SyntheticEvent<HTMLElement>) => void,
   onTopArrive: (event: SyntheticEvent<HTMLElement>) => void,
@@ -17,7 +16,6 @@ export default class ScrollCaptor extends Component<CaptorProps> {
   isTop: boolean = false;
   scrollTarget: HTMLElement;
   touchStart: number;
-  static defaultProps = { isEnabled: true };
 
   componentDidMount() {
     this.startListening(this.scrollTarget);
