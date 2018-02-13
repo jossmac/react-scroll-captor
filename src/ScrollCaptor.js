@@ -1,8 +1,7 @@
 // @flow
 
 import React, { Component, type Element } from 'react';
-import NodeFinder from 'react-node-resolver';
-import rafSchedule from 'raf-schd';
+import NodeResolver from 'react-node-resolver';
 
 export type CaptorProps = {
   children: Element<*>,
@@ -13,23 +12,20 @@ export type CaptorProps = {
   onTopLeave: (event: SyntheticEvent<HTMLElement>) => void,
 };
 
-export function cancelScrollEvent(event: SyntheticEvent<HTMLElement>) {
-  event.preventDefault();
-  event.stopPropagation();
-
-  return false;
-}
-
 export default class ScrollCaptor extends Component<CaptorProps> {
-  atBottom: boolean = false;
-  atTop: boolean = false;
+  isBottom: boolean = false;
+  isTop: boolean = false;
   scrollTarget: HTMLElement;
   touchStart: number;
   static defaultProps = { isEnabled: true };
 
   componentDidMount() {
-    const el = this.scrollTarget;
-
+    this.startListening(this.scrollTarget);
+  }
+  componentWillUnmount() {
+    this.stopListening(this.scrollTarget);
+  }
+  startListening(el: HTMLElement) {
     // bail early if no scroll available
     if (el.scrollHeight <= el.clientHeight) return;
 
@@ -44,9 +40,7 @@ export default class ScrollCaptor extends Component<CaptorProps> {
       el.addEventListener('touchmove', this.onTouchMove, false);
     }
   }
-  componentWillUnmount() {
-    const el = this.scrollTarget;
-
+  stopListening(el: HTMLElement) {
     // bail early if no scroll available
     if (el.scrollHeight <= el.clientHeight) return;
 
@@ -61,9 +55,11 @@ export default class ScrollCaptor extends Component<CaptorProps> {
       el.removeEventListener('touchmove', this.onTouchMove, false);
     }
   }
-  getScrollTarget = (ref: HTMLElement) => {
-    this.scrollTarget = ref;
-  };
+
+  cancelScroll = (event: SyntheticEvent<HTMLElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+  }
   handleEventDelta = (event: SyntheticEvent<HTMLElement>, delta: number) => {
     const {
       onBottomArrive,
@@ -76,37 +72,42 @@ export default class ScrollCaptor extends Component<CaptorProps> {
     const isDeltaPositive = delta > 0;
     const availableScroll = scrollHeight - clientHeight - scrollTop;
     let shouldCancelScroll = false;
-    // reset at bottom/top
-    if (availableScroll > delta && this.atBottom) {
+
+    // reset bottom/top flags
+    if (availableScroll > delta && this.isBottom) {
       if (onBottomLeave) onBottomLeave(event);
-      this.atBottom = false;
+      this.isBottom = false;
     }
-    if (isDeltaPositive && this.atTop) {
+    if (isDeltaPositive && this.isTop) {
       if (onTopLeave) onTopLeave(event);
-      this.atTop = false;
+      this.isTop = false;
     }
+
     // bottom limit
     if (isDeltaPositive && delta > availableScroll) {
-      if (onBottomArrive && !this.atBottom) {
+      if (onBottomArrive && !this.isBottom) {
         onBottomArrive(event);
       }
       target.scrollTop = scrollHeight;
       shouldCancelScroll = true;
-      this.atBottom = true;
+      this.isBottom = true;
+
+    // top limit
     } else if (!isDeltaPositive && -delta > scrollTop) {
-      // top limit
-      if (onTopArrive && !this.atTop) {
+      if (onTopArrive && !this.isTop) {
         onTopArrive(event);
       }
       target.scrollTop = 0;
       shouldCancelScroll = true;
-      this.atTop = true;
+      this.isTop = true;
     }
+
     // cancel scroll
     if (shouldCancelScroll) {
-      cancelScrollEvent(event);
+      this.cancelScroll(event);
     }
   };
+
   onWheel = (event: SyntheticWheelEvent<HTMLElement>) => {
     this.handleEventDelta(event, event.deltaY);
   };
@@ -118,11 +119,16 @@ export default class ScrollCaptor extends Component<CaptorProps> {
     const deltaY = this.touchStart - event.changedTouches[0].clientY;
     this.handleEventDelta(event, deltaY);
   };
+
+  getScrollTarget = (ref: HTMLElement) => {
+    this.scrollTarget = ref;
+  };
+
   render() {
     return (
-      <NodeFinder innerRef={this.getScrollTarget}>
+      <NodeResolver innerRef={this.getScrollTarget}>
         {this.props.children}
-      </NodeFinder>
+      </NodeResolver>
     );
   }
 }

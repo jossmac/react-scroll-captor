@@ -7,6 +7,7 @@
   ],
   "scripts": {
     "build": "babel src -d lib",
+    "watch": "babel src -d lib -w",
     "delete": "rm -rf node_modules",
     "lint": "eslint src/.",
     "prepublish": "yarn run build",
@@ -37,7 +38,6 @@
   },
   "homepage": "https://github.com/jossmac/react-scroll-captor#readme",
   "dependencies": {
-    "raf-schd": "^2.1.0",
     "react-node-resolver": "^1.0.1"
   },
   "peer-dependencies": {
