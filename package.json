@@ -29,9 +29,9 @@
     "scroll-captor",
     "scroll-capture",
     "scroll-lock",
-    "scroll-block"
+    "scroll-handler"
   ],
-  "author": "Joss mackison",
+  "author": "Joss Mackison",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/jossmac/react-scroll-captor/issues"
