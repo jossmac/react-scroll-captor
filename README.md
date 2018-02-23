@@ -1,4 +1,4 @@
-# React Scroll Captor
+# 📜 React Scroll Captor
 
 A component that confines scroll events to its immediate child. Great for dropdown menus etc.
 
